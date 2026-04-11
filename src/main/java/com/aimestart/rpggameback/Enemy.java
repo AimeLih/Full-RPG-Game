@@ -59,6 +59,15 @@ public class Enemy {
                 this.xp = 10;
                 this.gold = 4;
                 this.description = "A zombie that has been left to rot in the shadows";
+                break;
+            case "Skeleton":
+                this.name = "Skeleton";
+                this.hp = 15;
+                this.atk = atkrange(1,4);
+                this.xp = 14;
+                this.gold = 7;
+                this.description = "A skeleton warrior who has forgotten both their name and goal";
+                break;
         }
     }
     public void checkEnemy(){
