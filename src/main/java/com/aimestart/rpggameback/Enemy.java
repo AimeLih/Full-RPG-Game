@@ -84,6 +84,9 @@ public class Enemy {
             case "Zombie":
                 this.atk = atkrange(1,2);
                 break;
+            case "Skeleton":
+                this.atk = atkrange(1,4);
+                break;
         }
     }
 
