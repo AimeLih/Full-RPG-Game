@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Random;
 
 @RestController
+
+@CrossOrigin(origins = "http://localhost:5173")
+
 @RequestMapping
 public class PlayerController {
     Random rand = new Random();
