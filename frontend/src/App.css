@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+}
+
+.game-root {
+  background: #000;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  min-height: 100vh;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #fff;
+  padding: 8px 14px;
+  font-size: 9px;
+  color: #ccc;
+}
+
+.battle-area {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 12px;
+  flex: 1;
+}
+
+.portrait-box {
+  border: 2px solid #fff;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  position: relative;
+}
+
+.enemy-name-tag {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.stats-box {
+  border: 2px solid #fff;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #ccc;
+  border-bottom: 1px solid #222;
+  padding-bottom: 7px;
+}
+
+.stat-row .val { color: #fff; }
+.stat-row.hp .val { color: #6f6; }
+.stat-row.hp.low .val { color: #f66; }
+.stat-row.hp.mid .val { color: #fa0; }
+
+.hp-bar-wrap {
+  width: 100%;
+  height: 5px;
+  background: #222;
+  border: 1px solid #444;
+  margin-top: -6px;
+}
+
+.hp-bar { height: 100%; transition: width 0.3s; }
+
+.log-box {
+  border: 2px solid #fff;
+  padding: 12px 14px;
+  min-height: 80px;
+  font-size: 9px;
+  color: #ddd;
+  line-height: 2;
+}
+
+.log-line { color: #555; }
+.log-line.latest { color: #fff; }
+
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 11px;
+  background: #fff;
+  animation: blink 0.9s step-end infinite;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.action-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.act-btn {
+  border: 2px solid #fff;
+  background: #000;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 10px 4px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.6;
+  transition: background 0.1s, color 0.1s;
+}
+
+.act-btn:hover { background: #fff; color: #000; }
+.act-btn:active { transform: scale(0.97); }
+.act-btn.selected { background: #fff; color: #000; }
+.act-btn:disabled { opacity: 0.35; cursor: default; }
+
+.panel-overlay {
+  border: 2px solid #fff;
+  padding: 14px;
+  background: #000;
+  font-size: 9px;
+  display: none;
+}
+
+.panel-overlay.visible { display: block; }
+
+.panel-overlay h3 {
+  font-size: 9px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 6px;
+}
+
+.panel-overlay p {
+  color: #bbb;
+  line-height: 2;
+  font-size: 8px;
+}
+
+.sub-stat {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #1a1a1a;
+  font-size: 8px;
+  color: #aaa;
+}
+
+.sub-stat .v { color: #fff; }
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #222;
+  color: #ccc;
+}
+
+.item-use {
+  border: 1px solid #fff;
+  background: #000;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.item-use:hover { background: #fff; color: #000; }
+.item-use:disabled { opacity: 0.35; cursor: default; }
+
+.setup-box, .adventure-box, .shop-box, .end-box {
+  border: 2px solid #fff;
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.weapon-btn {
+  border: 2px solid #fff;
+  background: #000;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  padding: 12px 24px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 300px;
+}
+
+.weapon-btn:hover { background: #fff; color: #000; }
