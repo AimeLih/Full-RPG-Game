@@ -14,7 +14,7 @@ public class Player {
     private int xpbar = 0;
     private int endbar = 100;
     private int gold = 20;
-
+    private String weaponDescription;
 
 
     //deal with chance effects
@@ -132,14 +132,18 @@ public class Player {
             case "Rusted Dagger":
                 this.atk = atkrange(2,4);
                 this.crit = 35;
+                this.weaponDescription = "A sword that was crafted out of some dusty wood on a cool weekday. Make sure not to overuse it";
                 break;
             case "Wooden Sword":
                 this.atk = atkrange(5,8);
                 this.crit = 10;
+                this.weaponDescription = "A dagger that has gone past its usefulness. Might be able to inflict minor wounds";
                 break;
             case "Old Scythe":
                 this.atk = atkrange(1,4);
                 this.crit = 60;
+                this.weaponDescription = "A scythe that was handled with care until its owner passed away. You feel as if it yearns to be used once more";
+                break;
         }
     }
     public void levelup(){
@@ -203,8 +207,7 @@ public class Player {
             switch (weaponselection) {
                 case "Wooden Sword":
                     System.out.println("Wooden Sword -");
-                    addDelay(750);
-                    System.out.println("A sword that was crafted out of some dusty wood on a cool weekday. Make sure not to overuse it");
+
                     addDelay(2750);
                     System.out.println("Will you travel with this weapon?\n" +
                             "Y-N");
@@ -217,8 +220,7 @@ public class Player {
                     break;
                 case "Rusted Dagger":
                     System.out.println("Rusted Dagger -");
-                    addDelay(750);
-                    System.out.println("A dagger that has gone past its usefulness. Might be able to inflict minor wounds");
+
                     addDelay(2750);
                     System.out.println("Will you travel with this weapon?\n" +
                             "Y-N");
@@ -231,8 +233,7 @@ public class Player {
                     break;
                 case "Old Scythe":
                     System.out.println("Old Scythe -");
-                    addDelay(750);
-                    System.out.println("A scythe that was handled with care until its owner passed away. You feel as if it yearns to be used once more");
+
                     addDelay(2750);
                     System.out.println("Will you travel with this weapon?\n" +
                             "Y-N");
