@@ -20,6 +20,7 @@ const OUTCOME_VICTORY = 'VICTORY'
 const OUTCOME_DEFEAT = 'DEFEAT'
 const LOOP_RESTART_OFFSET_SECONDS = 0.06
 const LOOP_EARLY_RESTART_SECONDS = 0.18
+const BOOT_TIMEOUT_MS = 20000
 
 const introLines = [
   { text: 'Welcome traveler to the world of Rashinova.', delay: 2500 },
@@ -37,7 +38,7 @@ const readStoredVolume = () => {
 
 const readStoredMute = () => window.localStorage.getItem('rashinova-music-muted') === 'true'
 
-function IntroScreen({ canBegin, loadingMessage, onDone, onStart }) {
+function IntroScreen({ buttonLabel, canBegin, loadingMessage, onDone, onStart }) {
   const [visibleLines, setVisibleLines] = useState([])
   const [finished, setFinished] = useState(false)
 
@@ -105,7 +106,7 @@ function IntroScreen({ canBegin, loadingMessage, onDone, onStart }) {
             style={{ marginTop: '30px', alignSelf: 'center', opacity: canBegin ? 1 : 0.65 }}
             onClick={onDone}
           >
-            {canBegin ? 'BEGIN YOUR JOURNEY' : loadingMessage}
+            {canBegin ? buttonLabel : loadingMessage}
           </button>
         </>
       )}
@@ -118,6 +119,14 @@ function IntroScreen({ canBegin, loadingMessage, onDone, onStart }) {
     </div>
   )
 }
+
+const withTimeout = (promise, ms) =>
+  Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      window.setTimeout(() => reject(new Error('Boot timed out')), ms)
+    }),
+  ])
 
 function LeaderboardPanel({
   entries,
@@ -199,7 +208,9 @@ function App() {
   const [runResult, setRunResult] = useState(null)
   const [audioUnlocked, setAudioUnlocked] = useState(false)
   const [isBootReady, setIsBootReady] = useState(false)
+  const [isBeginningJourney, setIsBeginningJourney] = useState(false)
   const [bootError, setBootError] = useState('')
+  const [bootNonce, setBootNonce] = useState(0)
 
   const adventureAudioRef = useRef(null)
   const shopAudioRef = useRef(null)
@@ -456,21 +467,25 @@ function App() {
       }
 
       try {
-        const state = await gameApi.startGame()
+        const state = await withTimeout(gameApi.loadGame(), BOOT_TIMEOUT_MS)
         initializeFromState(state)
       } catch {
         try {
-          const state = await gameApi.startGame()
+          const state = await withTimeout(gameApi.loadGame(), BOOT_TIMEOUT_MS)
           initializeFromState(state)
         } catch (error) {
           console.error('Boot error:', error)
-          setBootError('The world is still waking up. Please wait a moment and try again.')
+          setBootError('The world is still waking up. Press retry in a moment.')
         }
       }
     }
 
     bootGame()
-  }, [])
+  }, [bootNonce])
+
+  const retryBoot = () => {
+    setBootNonce(prev => prev + 1)
+  }
 
   useEffect(() => {
     const adventureAudio = new Audio(adventureTheme)
@@ -623,12 +638,31 @@ function App() {
   }
 
   const beginJourney = async () => {
-    if (!isBootReady) {
+    if (!isBootReady || isBeginningJourney) {
       return
     }
+    setIsBeginningJourney(true)
     setSelectedWeapon(null)
     setActionError('')
-    setGameStage('MODE_SELECT')
+    setBootError('')
+
+    try {
+      const state = await withTimeout(gameApi.startGame(), BOOT_TIMEOUT_MS)
+      syncGameState(state)
+      setBattle(null)
+      setActivePanel(null)
+      setCombatLog(INITIAL_LOG)
+      setRunResult(null)
+      setLeaderboardSubmitted(false)
+      setLeaderboardOpen(false)
+      setLeaderboardName('')
+      setGameStage('MODE_SELECT')
+    } catch (error) {
+      console.error('Begin journey error:', error)
+      setBootError('The journey could not begin yet. Press retry in a moment.')
+    } finally {
+      setIsBeginningJourney(false)
+    }
   }
 
   const startIntroTheme = async () => {
@@ -970,9 +1004,10 @@ function App() {
             </p>
           )}
           <IntroScreen
-            canBegin={isBootReady}
-            loadingMessage="WAKING THE WORLD..."
-            onDone={beginJourney}
+            buttonLabel={bootError ? 'RETRY WAKE-UP' : 'BEGIN YOUR JOURNEY'}
+            canBegin={(isBootReady && !isBeginningJourney) || Boolean(bootError)}
+            loadingMessage={isBeginningJourney ? 'BEGINNING JOURNEY...' : 'WAKING THE WORLD...'}
+            onDone={bootError ? retryBoot : beginJourney}
             onStart={startIntroTheme}
           />
         </>
