@@ -19,6 +19,60 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  position: relative;
+}
+
+.top-controls {
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+
+.mini-btn {
+  border: 1px solid #666;
+  background: #000;
+  color: #bbb;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.mini-btn:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.mini-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.settings-panel {
+  position: absolute;
+  top: 52px;
+  left: 16px;
+  z-index: 5;
+  width: 220px;
+  border: 2px solid #fff;
+  background: #000;
+  padding: 12px;
+}
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: #bbb;
+  font-size: 8px;
+}
+
+.volume-slider {
+  width: 100%;
+  accent-color: #fff;
 }
 
 .header {
@@ -26,7 +80,7 @@ body {
   justify-content: space-between;
   align-items: center;
   border: 2px solid #fff;
-  padding: 8px 14px;
+  padding: 8px 14px 8px 150px;
   font-size: 9px;
   color: #ccc;
 }
@@ -46,6 +100,7 @@ body {
   justify-content: center;
   min-height: 240px;
   position: relative;
+  overflow: hidden;
 }
 
 .enemy-name-tag {
@@ -54,6 +109,15 @@ body {
   left: 10px;
   font-size: 8px;
   letter-spacing: 1px;
+}
+
+.enemy-portrait {
+  width: min(260px, 78%);
+  max-width: 260px;
+  max-height: 260px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 18px rgba(255, 255, 255, 0.12));
 }
 
 .stats-box {
@@ -203,6 +267,41 @@ body {
   gap: 16px;
 }
 
+.intro-box {
+  align-items: flex-start;
+  position: relative;
+  min-height: 300px;
+}
+
+.intro-copy {
+  text-align: left;
+  max-width: 600px;
+  width: 100%;
+}
+
+.skip-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: transparent;
+  border: 1px solid #444;
+  color: #555;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.weapon-card {
+  border: 2px solid #555;
+  padding: 14px 20px;
+  width: 100%;
+  max-width: 340px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.1s;
+}
+
 .weapon-btn {
   border: 2px solid #fff;
   background: #000;
@@ -216,3 +315,131 @@ body {
 }
 
 .weapon-btn:hover { background: #fff; color: #000; }
+.weapon-btn:disabled { opacity: 0.4; cursor: default; }
+
+.alt-btn {
+  border-color: #4aa;
+  color: #8ff;
+}
+
+.panel-error {
+  color: #f66;
+  line-height: 2;
+  font-size: 8px;
+}
+
+.end-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.leaderboard-panel {
+  width: 100%;
+  max-width: 620px;
+  border: 2px solid #fff;
+  padding: 18px;
+  text-align: left;
+}
+
+.leaderboard-panel h3 {
+  margin-bottom: 12px;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.leaderboard-submit {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.leaderboard-input {
+  flex: 1;
+  min-width: 200px;
+  border: 1px solid #666;
+  background: #000;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 10px;
+}
+
+.leaderboard-save {
+  min-width: 120px;
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.leaderboard-row {
+  border: 1px solid #333;
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.leaderboard-name {
+  color: #fff;
+  font-size: 8px;
+}
+
+.leaderboard-meta,
+.leaderboard-summary {
+  color: #aaa;
+  font-size: 8px;
+  line-height: 1.8;
+}
+
+.shop-mode .shop-box {
+  box-shadow: 0 0 0 2px rgba(180, 255, 210, 0.08) inset;
+}
+
+.reset-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 5;
+  border-color: #733;
+  color: #f88;
+  background: rgba(0, 0, 0, 0.92);
+}
+
+.reset-btn:hover {
+  border-color: #f88;
+  color: #fff;
+}
+
+@media (max-width: 720px) {
+  .header {
+    padding-left: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .top-controls {
+    position: static;
+    margin-bottom: 4px;
+  }
+
+  .settings-panel {
+    position: static;
+    width: 100%;
+  }
+
+  .battle-area {
+    grid-template-columns: 1fr;
+  }
+
+  .reset-btn {
+    right: 12px;
+    bottom: 12px;
+  }
+}

@@ -1,0 +1,13 @@
+services:
+  rpg-game:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - rpg-game-data:/app/data
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:file:/app/data/rpggame;AUTO_SERVER=TRUE
+
+volumes:
+  rpg-game-data:

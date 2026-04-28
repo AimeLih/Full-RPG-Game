@@ -8,13 +8,21 @@ public class GameStateResponse {
     private int crit;
     private int atk;
     private int hp;
+    private int maxHp;
     private int level;
+    private int day;
+    private int battleCount;
     private List<String> weaponOptions;
     private String weapon;
     private int gold;
     private int xp;
     private int xpNeeded;
     private Map<String, Integer> backpack;
+    private boolean battleActive;
+    private String enemyName;
+    private int enemyHp;
+    private String enemyDescription;
+    private String gameMode;
 
 
     public GameStateResponse(int hp, int level, List<String> weaponOptions) {
@@ -48,6 +56,14 @@ public class GameStateResponse {
 
     public void setHp(int hp) {
         this.hp = hp;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
     }
 
     public int getLevel() {
@@ -119,6 +135,62 @@ public class GameStateResponse {
 
     public void setCrit(int crit) {
         this.crit = crit;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public int getBattleCount() {
+        return battleCount;
+    }
+
+    public void setBattleCount(int battleCount) {
+        this.battleCount = battleCount;
+    }
+
+    public boolean isBattleActive() {
+        return battleActive;
+    }
+
+    public void setBattleActive(boolean battleActive) {
+        this.battleActive = battleActive;
+    }
+
+    public String getEnemyName() {
+        return enemyName;
+    }
+
+    public void setEnemyName(String enemyName) {
+        this.enemyName = enemyName;
+    }
+
+    public int getEnemyHp() {
+        return enemyHp;
+    }
+
+    public void setEnemyHp(int enemyHp) {
+        this.enemyHp = enemyHp;
+    }
+
+    public String getEnemyDescription() {
+        return enemyDescription;
+    }
+
+    public void setEnemyDescription(String enemyDescription) {
+        this.enemyDescription = enemyDescription;
+    }
+
+    public String getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(String gameMode) {
+        this.gameMode = gameMode;
     }
 
 }
