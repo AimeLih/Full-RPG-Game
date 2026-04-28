@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(originPatterns = {
+        "http://localhost:5173",
+        "https://frontend-aime-lihonos-projects.vercel.app",
+        "https://*.vercel.app"
+})
 @RequestMapping
 public class PlayerController {
 

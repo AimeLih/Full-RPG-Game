@@ -10,6 +10,10 @@ const resolveApiBaseUrl = () => {
         return 'http://localhost:8080';
     }
 
+    if (window.location.hostname.includes('vercel.app')) {
+        return 'https://rashinova-backend.onrender.com';
+    }
+
     return '';
 };
 
