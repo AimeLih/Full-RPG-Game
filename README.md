@@ -1,4 +1,4 @@
-# RPG Game Back
+# RPG Game 
 
 Simple browser RPG with a Spring Boot backend and React frontend, bundled together into a single app build.
 
