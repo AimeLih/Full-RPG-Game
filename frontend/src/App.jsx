@@ -37,7 +37,7 @@ const readStoredVolume = () => {
 
 const readStoredMute = () => window.localStorage.getItem('rashinova-music-muted') === 'true'
 
-function IntroScreen({ onDone, onStart }) {
+function IntroScreen({ canBegin, loadingMessage, onDone, onStart }) {
   const [visibleLines, setVisibleLines] = useState([])
   const [finished, setFinished] = useState(false)
 
@@ -92,9 +92,22 @@ function IntroScreen({ onDone, onStart }) {
       </div>
 
       {finished && (
-        <button className="weapon-btn" style={{ marginTop: '30px', alignSelf: 'center' }} onClick={onDone}>
-          BEGIN YOUR JOURNEY
-        </button>
+        <>
+          {!canBegin && (
+            <div className="boot-status" aria-live="polite">
+              <span className="boot-spinner" aria-hidden="true" />
+              <span>{loadingMessage}</span>
+            </div>
+          )}
+          <button
+            className="weapon-btn"
+            disabled={!canBegin}
+            style={{ marginTop: '30px', alignSelf: 'center', opacity: canBegin ? 1 : 0.65 }}
+            onClick={onDone}
+          >
+            {canBegin ? 'BEGIN YOUR JOURNEY' : loadingMessage}
+          </button>
+        </>
       )}
 
       {!finished && (
@@ -185,6 +198,8 @@ function App() {
   const [leaderboardSubmitted, setLeaderboardSubmitted] = useState(false)
   const [runResult, setRunResult] = useState(null)
   const [audioUnlocked, setAudioUnlocked] = useState(false)
+  const [isBootReady, setIsBootReady] = useState(false)
+  const [bootError, setBootError] = useState('')
 
   const adventureAudioRef = useRef(null)
   const shopAudioRef = useRef(null)
@@ -423,24 +438,38 @@ function App() {
 
   useEffect(() => {
     const bootGame = async () => {
-      const state = await gameApi.startGame()
-      syncGameState(state)
-      setBattle(null)
-      setSelectedWeapon(null)
-      setActivePanel(null)
-      setCombatLog(INITIAL_LOG)
-      setRunResult(null)
-      setLeaderboardSubmitted(false)
-      setLeaderboardOpen(false)
-      setLeaderboardName('')
-      setGameStage('INTRO')
+      setIsBootReady(false)
+      setBootError('')
+
+      const initializeFromState = (state) => {
+        syncGameState(state)
+        setBattle(null)
+        setSelectedWeapon(null)
+        setActivePanel(null)
+        setCombatLog(INITIAL_LOG)
+        setRunResult(null)
+        setLeaderboardSubmitted(false)
+        setLeaderboardOpen(false)
+        setLeaderboardName('')
+        setGameStage('INTRO')
+        setIsBootReady(true)
+      }
+
+      try {
+        const state = await gameApi.startGame()
+        initializeFromState(state)
+      } catch {
+        try {
+          const state = await gameApi.startGame()
+          initializeFromState(state)
+        } catch (error) {
+          console.error('Boot error:', error)
+          setBootError('The world is still waking up. Please wait a moment and try again.')
+        }
+      }
     }
 
-    bootGame().catch(async () => {
-      const state = await gameApi.startGame()
-      syncGameState(state)
-      setGameStage('INTRO')
-    })
+    bootGame()
   }, [])
 
   useEffect(() => {
@@ -594,6 +623,9 @@ function App() {
   }
 
   const beginJourney = async () => {
+    if (!isBootReady) {
+      return
+    }
     setSelectedWeapon(null)
     setActionError('')
     setGameStage('MODE_SELECT')
@@ -931,7 +963,19 @@ function App() {
       )}
 
       {gameStage === 'INTRO' && (
-        <IntroScreen onDone={beginJourney} onStart={startIntroTheme} />
+        <>
+          {bootError && (
+            <p className="panel-error" style={{ marginTop: '12px', textAlign: 'center' }}>
+              {bootError}
+            </p>
+          )}
+          <IntroScreen
+            canBegin={isBootReady}
+            loadingMessage="WAKING THE WORLD..."
+            onDone={beginJourney}
+            onStart={startIntroTheme}
+          />
+        </>
       )}
 
       {gameStage === 'MODE_SELECT' && (
